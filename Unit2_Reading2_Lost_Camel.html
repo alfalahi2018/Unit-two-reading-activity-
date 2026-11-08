@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 2 – Reading 2: The Lost Camel</title>
+<style>
+:root{--sand:#fff6e5;--card:#ffffff;--ink:#2b2a33;--accent:#e8892b;--accent2:#2b8a8f;--ok:#2e9e5b;--bad:#d64545;--line:#f0d9b5}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#ffe7bd 0%,var(--sand) 220px);color:var(--ink);line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding:16px}
+header{text-align:center;padding:10px 0 4px}
+.school{font-size:.95rem;color:#8a5a1d;font-weight:600}
+h1{margin:4px 0;font-size:1.7rem;color:var(--accent)}
+.sub{font-size:1.05rem;color:var(--accent2);font-weight:700}
+.camel{font-size:2.2rem;display:inline-block;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.id{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.id label{flex:1 1 220px;font-weight:700;font-size:.95rem}
+.id input{width:100%;margin-top:4px;padding:10px;border:2px solid var(--line);border-radius:10px;font-size:1rem;background:#fff}
+.instr{font-size:1.25rem;font-weight:800;margin:12px 0 8px}
+.passage{background:var(--card);border:2px solid #333;border-radius:26px;padding:18px 20px;font-size:1.08rem;box-shadow:0 4px 0 var(--line)}
+.passage p{margin:.35em 0}
+.passage .s{transition:background .3s;border-radius:4px}
+.passage .s.hl{background:#ffe27a;box-shadow:0 0 0 3px #ffe27a}
+.bar{position:sticky;top:0;z-index:5;background:#fff6e5ee;backdrop-filter:blur(4px);padding:8px 0;margin-top:10px}
+.prog{height:12px;background:#f1e0c3;border-radius:10px;overflow:hidden}
+.prog>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .4s}
+.stat{display:flex;justify-content:space-between;font-weight:700;font-size:.95rem;margin-top:4px}
+.q{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:14px 0;transition:border-color .3s,transform .2s}
+.q.right{border-color:var(--ok);background:#f1fbf5}
+.q.wrong{border-color:var(--bad);animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.q h3{margin:0 0 8px;font-size:1.12rem}
+.q h3 span{display:inline-block;background:var(--accent);color:#fff;border-radius:50%;width:30px;height:30px;text-align:center;line-height:30px;margin-right:8px}
+textarea{width:100%;min-height:62px;border:2px dashed #cfae7a;border-radius:12px;padding:10px;font-size:1.05rem;font-family:inherit;resize:vertical;background:#fffdf8}
+textarea:focus{outline:none;border-color:var(--accent2);border-style:solid}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+button{border:0;border-radius:12px;padding:10px 16px;font-size:1rem;font-weight:700;cursor:pointer;color:#fff;background:var(--accent2);transition:transform .1s,opacity .2s}
+button:active{transform:scale(.96)}
+button.hint{background:#8d6bd1}
+button.show{background:#999}
+button.main{background:var(--accent);font-size:1.1rem;padding:12px 26px}
+button:disabled{opacity:.5;cursor:default}
+.fb{margin-top:8px;font-weight:700;min-height:1.2em}
+.fb.ok{color:var(--ok)} .fb.no{color:var(--bad)} .fb.info{color:#6a4fb0}
+.model{font-weight:600;color:#555}
+.result{display:none;text-align:center;background:var(--card);border:3px solid var(--accent);border-radius:22px;padding:20px;margin:18px 0}
+.result.on{display:block;animation:pop .5s}
+@keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.result .big{font-size:2.4rem;font-weight:900;color:var(--accent)}
+.stars{font-size:2rem}
+footer{text-align:center;margin:22px 0 10px}
+.credit{display:inline-block;background:#f9cf9c;border-radius:12px;padding:8px 22px;font-weight:800;font-size:1.1rem}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media(max-width:520px){h1{font-size:1.4rem}.passage{font-size:1rem;padding:14px}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="wrap">
+  <header>
+    <div class="school">Khawlah Bint Thalabah (5-9)</div>
+    <div class="camel">🐫</div>
+    <h1>The Lost Camel</h1>
+    <div class="sub">Unit 2 · Reading 2</div>
+  </header>
+
+  <div class="id">
+    <label>Name:<input id="stName" type="text" placeholder="Write your name"></label>
+    <label>Grade:<input id="stGrade" type="text" value="Grade 7"></label>
+  </div>
+
+  <div class="instr">Read and answer the questions:</div>
+  <div class="passage" id="passage">
+    <p><span class="s" id="s1">During a family drive through the desert, Saif noticed a young camel standing beside the road.</span> <span class="s" id="s2">It had one small hump, long legs and a blue rope around its neck.</span> <span class="s" id="s3">His father stopped the car in a safe place.</span></p>
+    <p><span class="s">“It might be lost,” Saif said.</span></p>
+    <p><span class="s" id="s4">“It can’t be a wild camel because it has a rope,” replied his sister, Huda. “It must belong to a nearby farm.”</span></p>
+    <p><span class="s">The family stayed inside the car and watched.</span> <span class="s" id="s5">Suddenly, another vehicle sounded its horn. The frightened camel ran onto the road, and both cars had to stop.</span> <span class="s">Saif’s father called a local animal rescue centre and explained where they were.</span></p>
+    <p><span class="s">“If the camel stays here, there will be an accident,” he told them.</span></p>
+    <p><span class="s">A rescue worker arrived fifteen minutes later. She moved slowly towards the camel and offered it some food. The animal followed her away from the road.</span> <span class="s" id="s6">Soon, an old farmer came in a truck. He recognised the camel immediately and called it Lulu.</span> <span class="s">He explained that a farm gate had broken during the night, so Lulu had walked away.</span></p>
+    <p><span class="s">The farmer thanked the family and led Lulu into his truck. Before leaving, the rescue worker praised Saif’s father for not trying to catch the frightened animal himself.</span></p>
+    <p><span class="s" id="s7">“If I ever find another lost animal, I’ll contact an expert again,” Saif decided.</span></p>
+  </div>
+
+  <div class="bar">
+    <div class="prog"><div id="pbar"></div></div>
+    <div class="stat"><span id="pText">0 / 5 answered</span><span id="sText">Score: 0 / 5</span></div>
+  </div>
+
+  <div id="qs"></div>
+
+  <div style="text-align:center"><button class="main" id="finish">🏁 Finish &amp; see my score</button></div>
+
+  <div class="result" id="result">
+    <div class="stars" id="stars"></div>
+    <div class="big" id="big"></div>
+    <p id="msg" style="font-size:1.15rem;font-weight:700"></p>
+    <p id="who" style="color:#666"></p>
+    <button class="main" onclick="location.reload()">🔄 Try again</button>
+  </div>
+
+  <footer><div class="credit">Created by T.Badria Alfalahi</div></footer>
+</div>
+
+<script>
+/* ---------- SCORM 1.2 helper (safe when no LMS is present) ---------- */
+var SCORM=(function(){
+  var api=null,ok=false;
+  function find(w){var n=0;while(w&&!w.API&&w.parent&&w.parent!==w&&n<10){w=w.parent;n++}return w&&w.API?w.API:null}
+  try{api=find(window)||(window.opener?find(window.opener):null)}catch(e){}
+  return{
+    init:function(){if(!api)return;try{ok=String(api.LMSInitialize(""))==="true";
+      if(ok){var st=api.LMSGetValue("cmi.core.lesson_status");if(!st||st==="not attempted")api.LMSSetValue("cmi.core.lesson_status","incomplete");api.LMSCommit("")}}catch(e){}},
+    name:function(){if(!ok)return"";try{return api.LMSGetValue("cmi.core.student_name")||""}catch(e){return""}},
+    report:function(raw,status){if(!ok)return;try{api.LMSSetValue("cmi.core.score.min","0");api.LMSSetValue("cmi.core.score.max","100");
+      api.LMSSetValue("cmi.core.score.raw",String(raw));api.LMSSetValue("cmi.core.lesson_status",status);api.LMSCommit("")}catch(e){}},
+    end:function(){if(!ok)return;try{api.LMSCommit("");api.LMSFinish("");ok=false}catch(e){}}
+  };
+})();
+SCORM.init();
+window.addEventListener("beforeunload",function(){SCORM.end()});
+window.addEventListener("unload",function(){SCORM.end()});
+
+/* ---------- Questions & auto-correction rules ---------- */
+var Q=[
+ {q:"Where did Saif see the young camel?",
+  rules:[/\b(road|roadside|desert|street)\b/],
+  model:"He saw it beside the road in the desert.",
+  hint:"Think about the first sentence of the story. 🏜️",ev:"s1"},
+ {q:"What showed that the camel might belong to someone?",
+  rules:[/\b(rope|ropes)\b/],
+  model:"It had a blue rope around its neck.",
+  hint:"Look at what was around its neck. 🔵",ev:"s2"},
+ {q:"Why did both vehicles have to stop?",
+  rules:[/\bcamel\b|\b(it|animal)\b/,/\b(ran|run|onto|on the road|in the road|frightened|scared|afraid|horn)\b/],
+  model:"Because the frightened camel ran onto the road.",
+  hint:"What did the frightened camel do after the horn? 🚗",ev:"s5"},
+ {q:"Who recognised the camel?",
+  rules:[/\bfarmer\b/],
+  model:"The old farmer recognised the camel.",
+  hint:"He came in a truck. 🚚",ev:"s6"},
+ {q:"What will Saif do if he finds another lost animal?",
+  rules:[/\b(contact|call|phone|ask|tell|inform)\b/,/\b(expert|experts|rescue|specialist|professional)\b/],
+  model:"He will contact an expert.",
+  hint:"Read Saif’s last sentence. 🧑‍⚕️",ev:"s7"}
+];
+var state=Q.map(function(){return{done:false,right:false,tries:0,shown:false}});
+
+function norm(t){return" "+t.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z' ]/g," ").replace(/\s+/g," ").trim()+" "}
+function judge(i,text){
+  var t=norm(text);
+  if(t.trim().length<2)return null;
+  return Q[i].rules.every(function(r){return r.test(t)});
+}
+
+/* ---------- Sound & confetti ---------- */
+var AC=null;
+function tone(f,d,type,delay){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||"sine";o.frequency.value=f;g.gain.value=.12;o.connect(g);g.connect(AC.destination);var s=AC.currentTime+(delay||0);
+  g.gain.setValueAtTime(.12,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+function sOk(){tone(660,.15,"triangle",0);tone(880,.25,"triangle",.12)}
+function sNo(){tone(220,.25,"sawtooth",0)}
+function sWin(){[523,659,784,1047].forEach(function(f,i){tone(f,.25,"triangle",i*.14)})}
+var cv=document.getElementById("fx"),cx=cv.getContext("2d"),bits=[];
+function sz(){cv.width=innerWidth;cv.height=innerHeight}sz();addEventListener("resize",sz);
+function confetti(n){for(var i=0;i<n;i++)bits.push({x:Math.random()*cv.width,y:-10,vx:Math.random()*4-2,vy:Math.random()*3+2,r:Math.random()*6+3,c:"hsl("+Math.random()*360+",85%,60%)"});if(bits.length===n)loop()}
+function loop(){cx.clearRect(0,0,cv.width,cv.height);bits.forEach(function(b){b.x+=b.vx;b.y+=b.vy;cx.fillStyle=b.c;cx.fillRect(b.x,b.y,b.r,b.r*1.6)});
+  bits=bits.filter(function(b){return b.y<cv.height+20});if(bits.length)requestAnimationFrame(loop);else cx.clearRect(0,0,cv.width,cv.height)}
+
+/* ---------- Build UI ---------- */
+var box=document.getElementById("qs");
+Q.forEach(function(it,i){
+  var d=document.createElement("div");d.className="q";d.id="q"+i;
+  d.innerHTML='<h3><span>'+(i+1)+'</span>'+it.q+'</h3>'+
+   '<textarea id="a'+i+'" placeholder="Write your answer here..."></textarea>'+
+   '<div class="btns"><button onclick="check('+i+')" id="c'+i+'">✅ Check</button>'+
+   '<button class="hint" onclick="hint('+i+')">💡 Hint</button>'+
+   '<button class="show" id="sh'+i+'" onclick="show('+i+')" style="display:none">👀 Show answer</button></div>'+
+   '<div class="fb" id="f'+i+'"></div>';
+  box.appendChild(d);
+});
+
+function hl(id){document.querySelectorAll(".passage .s.hl").forEach(function(e){e.classList.remove("hl")});
+  var e=document.getElementById(id);if(e){e.classList.add("hl");e.scrollIntoView({behavior:"smooth",block:"center"})}}
+function hint(i){var f=document.getElementById("f"+i);f.className="fb info";f.textContent=Q[i].hint;hl(Q[i].ev)}
+function check(i){
+  var s=state[i];if(s.done)return;
+  var ta=document.getElementById("a"+i),f=document.getElementById("f"+i),d=document.getElementById("q"+i);
+  var r=judge(i,ta.value);
+  if(r===null){f.className="fb no";f.textContent="✍️ Please write your answer first.";return}
+  s.tries++;
+  if(r){s.done=true;s.right=true;d.className="q right";f.className="fb ok";
+    f.innerHTML="🎉 Correct! Great job!<br><span class='model'>Model answer: "+Q[i].model+"</span>";
+    ta.readOnly=true;document.getElementById("c"+i).disabled=true;sOk();hl(Q[i].ev);confetti(40)}
+  else{d.className="q wrong";setTimeout(function(){d.classList.remove("wrong")},500);f.className="fb no";
+    f.textContent="❌ Not quite. Read the story again and try once more!";document.getElementById("sh"+i).style.display="inline-block";sNo()}
+  update();
+}
+function show(i){
+  var s=state[i];if(s.done)return;
+  s.done=true;s.right=false;s.shown=true;
+  var f=document.getElementById("f"+i);f.className="fb info";
+  f.innerHTML="Model answer: <span class='model'>"+Q[i].model+"</span>";
+  document.getElementById("a"+i).readOnly=true;document.getElementById("c"+i).disabled=true;hl(Q[i].ev);update();
+}
+function score(){return state.filter(function(s){return s.right}).length}
+function update(){
+  var d=state.filter(function(s){return s.done}).length;
+  document.getElementById("pbar").style.width=(d/Q.length*100)+"%";
+  document.getElementById("pText").textContent=d+" / "+Q.length+" answered";
+  document.getElementById("sText").textContent="Score: "+score()+" / "+Q.length;
+}
+
+document.getElementById("finish").onclick=function(){
+  /* check any written-but-unchecked answers */
+  Q.forEach(function(_,i){if(!state[i].done){var v=document.getElementById("a"+i).value;if(judge(i,v)){check(i)}}});
+  var sc=score(),pct=Math.round(sc/Q.length*100);
+  var nm=document.getElementById("stName").value.trim()||SCORM.name();
+  document.getElementById("big").textContent=sc+" / "+Q.length+"  ("+pct+"%)";
+  document.getElementById("stars").textContent="⭐".repeat(Math.max(1,Math.round(sc/Q.length*5)));
+  document.getElementById("msg").textContent=pct===100?"Excellent! You are a reading star! 🌟":pct>=60?"Well done! Keep practising! 👏":"Good try! Read the story again and try once more. 💪";
+  document.getElementById("who").textContent=(nm?nm+" · ":"")+document.getElementById("stGrade").value;
+  var r=document.getElementById("result");r.classList.add("on");r.scrollIntoView({behavior:"smooth"});
+  if(pct>=60){sWin();confetti(160)}
+  SCORM.report(pct,"completed");
+};
+var n=SCORM.name();if(n){var el=document.getElementById("stName");if(!el.value)el.value=n}
+</script>
+</body>
+</html>
